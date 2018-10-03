@@ -1,0 +1,51 @@
+---
+title: "activity_lab_3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+```
+
+
+```{r}
+x= seq(-4,4, by=0.1)
+y = dnorm(seq(-4,4, by=0.1))
+
+df = data.frame("x" = x, "y" = y)
+
+p = ggplot(data = df, aes(x=x, y = y))
+p = p + geom_line(color= "blue") + geom_ribbon(data = df[df$x<(-1),], aes(x=x,ymin=0, ymax=y), fill="red")
+plot(p)
+
+```
+
+
+
+```{r}
+library(gapminder)
+```
+
+```{r}
+data = subset(gapminder, year == 2007)
+europe = data %>% subset(gdpPercap > 40000) %>% subset(continent == "Europe")
+pg = ggplot(data, aes(x=gdpPercap, y = lifeExp)) + geom_label(aes(x=gdpPercap,y= lifeExp, label = country),data = europe) + geom_point(color = "blue") +
+  theme_bw() + labs(x="GDP per capita",y="Life Expectancy")
+plot(pg)
+```
+
+
+```{r}
+data = subset(gapminder, year == 2007)
+pg = ggplot(data, aes(x=gdpPercap, y = lifeExp)) + geom_point(color = "blue") +
+  theme_bw() + geom_rect(data=gapminder[1,],aes(xmin=39000,xmax=51000,ymin=75,ymax=85), fill="red", alpha=0.1) + geom_label(aes(x=45000,y=68,label="Countries with \n  highest GDP"),size=3,fill="light blue") + labs(x="GDP per capita",y="Life Expectancy")
+plot(pg)
+```
+
+<!-- annotate("rect", xmin=39000,ymin=75,xmax=51000,ymax=85, alpha=0.2, fill="red",label="Countries with the highest GDP") -->
+
+<!-- geom_text(aes(x=40000,y=68,label="Countries with \n  highest GDP"),size = 3, vjust = 0, hjust = 0) -->
+
+
